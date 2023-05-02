@@ -97,7 +97,7 @@ class MyGEEClass:
         self.START_DATE = None
         self.END_DATE = None
         self.OUTPATH = None
-        self.BUFFER = None
+
 
     def get_any_image_median(self):
 
@@ -170,11 +170,11 @@ if __name__ == "__main__":
     myImg.START_DATE = f"{YEAR}-01-01"
     myImg.END_DATE = f"{YEAR+1}-01-01"
     myImg.filename = out_file_name
-    myImg.image = myImg.get_any_image_median()
     myImg.output_dir = out_path
     myImg.output_file = f"{out_path}/{out_file_name}"
 
     try:
+        myImg.image = myImg.get_any_image_median()
         myImg.get_image_to_file()
     except Exception as e:
         print(e)
