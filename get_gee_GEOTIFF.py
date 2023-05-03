@@ -7,6 +7,7 @@ import pandas as pd
 import geopandas as gpd
 import json
 import shapely
+shapely.speedups.disable()
 
 
 def geotiff_to_xyz(in_geotiff, out_xyz_path):

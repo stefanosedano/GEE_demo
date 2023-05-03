@@ -1,4 +1,5 @@
-FROM python:3.8.10-slim-buster
+FROM tensorflow/tensorflow:2.12.0-gpu-jupyter
+#FROM python:3.8.10-slim-buster
 RUN apt update
 RUN apt-get install nano -y
 
