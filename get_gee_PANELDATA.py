@@ -21,7 +21,6 @@ def fc_to_dict(fc):
 
     return ee.Dictionary.fromLists(prop_names, prop_lists)
 
-
 def pad_dict_list(dict_list, padel):
     lmax = 0
     for lname in dict_list.keys():
@@ -31,10 +30,6 @@ def pad_dict_list(dict_list, padel):
         if ll < lmax:
             dict_list[lname] += [padel] * (lmax - ll)
     return dict_list
-
-
-
-
 
 class ZsGEE:
 
