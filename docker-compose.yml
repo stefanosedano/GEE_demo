@@ -4,9 +4,12 @@ services:
   app:
     build:
       context: .
+    ports:
+      - "8888:8888"
+
     volumes:
       - .:/demogee
     command:
       - sh
       - -c
-      - tail -f /dev/null
+      - /bin/sh -c "/demogee/run_jupiter.sh"

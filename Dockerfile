@@ -18,8 +18,16 @@ RUN pip install pyarrow
 RUN pip install matplotlib
 RUN pip install geojson
 RUN python -m pip install --upgrade pip
-RUN pip install gdal==2.4.0
+RUN pip install gdal
 RUN pip install rasterio
 
-
 ENV PYTHONPATH "${PYTHONPATH}:/demogee"
+
+WORKDIR "/demogee"
+
+COPY run_jupiter.sh run_jupiter.sh
+
+
+
+
+
