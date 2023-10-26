@@ -203,13 +203,13 @@ def downlaodtiles(basepath,email,keypath):
                 for lat in range(-75,85,lat_steps):
                     list_of_bbox.append([lon, lat, lon+lon_steps, lat+lat_steps, startDate, endDate,year, quarter,basepath,email,keypath])
 
-    with Pool(40) as p:
+    with Pool(1) as p:
         p.map(process, list_of_bbox)
 
 if __name__ == "__main__":
     basepath = "DATA/NIGHTLIGHT/NOAA_VIIRS_DNB_MONTHLY_V1_VCMCFG/"
-    email = "test1-landsat8@geelandsat8.iam.gserviceaccount.com",
-    keypath = "mykey.json",
+    email = "test1-landsat8@geelandsat8.iam.gserviceaccount.com"
+    keypath = "mykey.json"
 
     #Here I am downloading the data by tile to overpass the GEE limits. tiles of 5x5 degreee
     downlaodtiles(basepath,email,keypath)
