@@ -153,7 +153,7 @@ def process(el):
     ee.Initialize(credentials)
 
 
-    numtile = "_".join(map(str,el))
+    numtile = "_".join(map(str,[lon,lat]))
     filename = f"{basepath}/tile_{numtile}.tif"
 
     if not os.path.exists(filename):
@@ -203,7 +203,7 @@ def downlaodtiles(basepath,email,keypath):
                 for lat in range(-75,85,lat_steps):
                     list_of_bbox.append([lon, lat, lon+lon_steps, lat+lat_steps, startDate, endDate,year, quarter,basepath,email,keypath])
 
-    with Pool(1) as p:
+    with Pool(100) as p:
         p.map(process, list_of_bbox)
 
 if __name__ == "__main__":
