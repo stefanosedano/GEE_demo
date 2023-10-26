@@ -194,7 +194,7 @@ def downlaodtiles(basepath,email,keypath):
         dates_plus.append(date+ timedelta(days=1))
 
     for i in range(0,len(dates_plus)):
-        if i > len(dates_plus):
+        if i < len(dates_plus)-1:
             startDate = dates_plus[i].strftime('%Y-%m-%d')
             endDate = dates_plus[i+1].strftime('%Y-%m-%d')
             quarter = f"Q{dates_plus[i].quarter}"
