@@ -194,15 +194,16 @@ def downlaodtiles(basepath,email,keypath):
         dates_plus.append(date+ timedelta(days=1))
 
     for i in range(0,len(dates_plus)):
-        startDate = dates_plus[i].strftime('%Y-%m-%d')
-        endDate = dates_plus[i+1].strftime('%Y-%m-%d')
-        quarter = f"Q{dates_plus[i].quarter}"
-        year = dates_plus[i].year
-        for lon in range(-185,180,lon_steps):
-            for lat in range(-75,85,lat_steps):
-                list_of_bbox.append([lon, lat, lon+lon_steps, lat+lat_steps, startDate, endDate,year, quarter,basepath,email,keypath])
+        if i > len(dates_plus):
+            startDate = dates_plus[i].strftime('%Y-%m-%d')
+            endDate = dates_plus[i+1].strftime('%Y-%m-%d')
+            quarter = f"Q{dates_plus[i].quarter}"
+            year = dates_plus[i].year
+            for lon in range(-185,180,lon_steps):
+                for lat in range(-75,85,lat_steps):
+                    list_of_bbox.append([lon, lat, lon+lon_steps, lat+lat_steps, startDate, endDate,year, quarter,basepath,email,keypath])
 
-    with Pool(20) as p:
+    with Pool(40) as p:
         p.map(process, list_of_bbox)
 
 if __name__ == "__main__":

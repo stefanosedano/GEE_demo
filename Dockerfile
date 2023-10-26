@@ -20,6 +20,7 @@ RUN pip install geojson
 RUN python -m pip install --upgrade pip
 RUN pip install gdal
 RUN pip install rasterio
+RUN pip install scikit-learn
 
 ENV PYTHONPATH "${PYTHONPATH}:/demogee"
 
