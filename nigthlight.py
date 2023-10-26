@@ -208,7 +208,7 @@ def downlaodtiles(basepath,email,keypath):
 if __name__ == "__main__":
     basepath = "DATA/NIGHTLIGHT/NOAA_VIIRS_DNB_MONTHLY_V1_VCMCFG/"
     email = "test1-landsat8@geelandsat8.iam.gserviceaccount.com",
-    keypath = "C:\\Users\\email\\Documents\\conflictproxyindicators\\Z_experiments\\2023_MU_Sierra_Leone_civil_conflcit\\geelandsat8-6af86334d7ec.json",
+    keypath = "mykey.json",
 
     #Here I am downloading the data by tile to overpass the GEE limits. tiles of 5x5 degreee
     downlaodtiles(basepath,email,keypath)
