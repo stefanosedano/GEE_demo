@@ -17,13 +17,14 @@ SATELLITE = "ECMWF/ERA5_LAND/MONTHLY_AGGR"
 BANDS = ["total_precipitation_sum"]
 
 ##Rectangualr box ref:minx, miny, maxx, maxy
-REGION = ee.Geometry.BBox(8, 45, 9, 46)
+#REGION = ee.Geometry.BBox(8, 45, 9, 46)
 
 ###Region by polygon:
-#REGION = gpd.read_file(f'reference_datasets/gadm_401_GID_1/IND.gpkg')
-#REGION = REGION.dissolve("GID_0").reset_index()
-#REGION.drop(columns=['GID_1', 'NAME_1'], axis=1, inplace=True )
-#REGION = ee.FeatureCollection(json.loads(REGION.to_json()))
+REGION = gpd.read_file(f'reference_datasets/gadm_401_GID_1/IND.gpkg')
+REGION = REGION.dissolve("GID_0").reset_index()
+REGION.geometry = REGION.simplify(0.1)
+REGION.drop(columns=['GID_1', 'NAME_1'], axis=1, inplace=True )
+REGION = ee.FeatureCollection(json.loads(REGION.to_json()))
 
 START_DATE = "2000-01-01"
 END_DATE = "2000-06-01"
@@ -33,8 +34,8 @@ image = image.sum()
 
 
 ##If region by Polygon (not rect) remember to clip
-#image = image.clip(REGION)
-#image = image.mask(image.mask())
+image = image.clip(REGION)
+image = image.mask(image.mask())
 
 SCALE = ee.ImageCollection(SATELLITE).first().projection().nominalScale().getInfo()
 
@@ -48,7 +49,9 @@ url = image.getDownloadUrl({
 
 response = requests.get(url)
 
-with open("myImage.tif", 'wb') as fd:
+with open("myImage_INDIA_clipped.tif", 'wb') as fd:
     fd.write(response.content)
+
+print("done")
 
 

@@ -7,6 +7,26 @@ import pandas as pd
 
 ################################################################################################
 
+def fc_to_dict(fc):
+    prop_names = fc.first().propertyNames()
+    prop_lists = fc.reduceColumns(
+        reducer=ee.Reducer.toList().repeat(prop_names.size()), selectors=prop_names
+    ).get("list")
+
+    return ee.Dictionary.fromLists(prop_names, prop_lists)
+
+def pad_dict_list(dict_list, padel):
+    lmax = 0
+    for lname in dict_list.keys():
+        lmax = max(lmax, len(dict_list[lname]))
+    for lname in dict_list.keys():
+        ll = len(dict_list[lname])
+        if ll < lmax:
+            dict_list[lname] += [padel] * (lmax - ll)
+    return dict_list
+
+
+
 credentials = ee.ServiceAccountCredentials(
     "test1-landsat8@geelandsat8.iam.gserviceaccount.com",
     "geelandsat8-6af86334d7ec.json",
@@ -14,19 +34,26 @@ credentials = ee.ServiceAccountCredentials(
 ee.Initialize(credentials)
 
 area = gpd.read_file(f'reference_datasets/gadm_401_GID_1/IND.gpkg')
-area = area.dissolve("GID_1").reset_index()
+#area = area.dissolve("GID_1").reset_index()
+area.geometry = area.simplify(0.1)
 area = ee.FeatureCollection(json.loads(area.to_json()))
 
 SATELLITE = "ECMWF/ERA5_LAND/MONTHLY_AGGR"
+
 BANDS = ["total_precipitation_sum"]
+
 SCALE = ee.ImageCollection(SATELLITE).first().projection().nominalScale().getInfo()
+
 dataset = ee.ImageCollection(SATELLITE).select(BANDS)
-startDate="2000-01-01"
-intervalCount = 12
-timeWindowLength = 1
+
+startDate="1950-03-01"
 intervalUnit="month"
+timeWindowLength = 1
+intervalCount = 12*5
+
 temporalReducer = ee.Reducer.sum()
 spatialReducers = ee.Reducer.sum()
+
 intervals = ee.List.sequence(0, intervalCount - 1, timeWindowLength)
 
 # Map reductions over index sequence to calculate statistics for each interval.
@@ -57,20 +84,8 @@ zonalStatsL = intervals.map(a)
 
 zonalStatsL = ee.FeatureCollection(zonalStatsL).flatten()
 
-prop_names = zonalStatsL.first().propertyNames()
-prop_lists = zonalStatsL.reduceColumns(
-    reducer=ee.Reducer.toList().repeat(prop_names.size()), selectors=prop_names
-).get("list")
+output = fc_to_dict(zonalStatsL).getInfo()
+output = pad_dict_list(output, np.nan)
+out_pd = pd.DataFrame(output)
 
-dict_list=  ee.Dictionary.fromLists(prop_names, prop_lists)
-
-padel=np.nan
-lmax = 0
-for lname in dict_list.keys():
-    lmax = max(lmax, len(dict_list[lname]))
-for lname in dict_list.keys():
-    ll = len(dict_list[lname])
-    if ll < lmax:
-        dict_list[lname] += [padel] * (lmax - ll)
-
-out_pd = pd.DataFrame(dict_list)
+print("done")
