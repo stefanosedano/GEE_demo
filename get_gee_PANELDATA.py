@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 import json
+import shapely
+shapely.speedups.disable()
+
 
 def getArea(GID_0):
     area = gpd.read_file(f'reference_datasets/gadm_401_GID_1/{GID_0[0:3]}.gpkg')
@@ -116,13 +119,13 @@ if __name__ == '__main__':
     ee.Initialize(credentials)
 
     myPanelData=ZsGEE()
-    myPanelData.intervalCount = 12
+    myPanelData.intervalCount = 1
     myPanelData.timeWindowLength=1
     myPanelData.intervalUnit="month"
 
-    myPanelData.datestart = "2022-01-01"
-    myPanelData.satellite = "NOAA/VIIRS/001/VNP46A2"
-    myPanelData.bands = "DNB_BRDF_Corrected_NTL"
+    myPanelData.datestart = "2000-03-01"
+    myPanelData.satellite = 'MODIS/061/MOD13A2'
+    myPanelData.bands = "NDVI"
     myPanelData.temporal_reducer = "median"
     myPanelData.GadmGID = 'ITA'
 

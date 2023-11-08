@@ -63,10 +63,6 @@ def warp_to_resolution(in_path,out_path,resolution):
                           options=['-te', str(xmin), str(ymin), str(xmax), str(ymax)]
                           )
 
-
-
-
-
         return True
     except Exception as e:
         print(e)
@@ -155,7 +151,7 @@ if __name__ == "__main__":
     GadmLevel = "GID_1"
     BANDS = 'NDVI'
     SATELLITE = "MODIS/061/MOD13A1"
-    YEAR = 2000
+    YEAR = 2010
     out_file_name="some_name.tiff"
     out_path = "output_TIFF"
 
